@@ -1,0 +1,42 @@
+<?php
+    session_start();
+
+    //print_r($_REQUEST);
+    if(isset($_POST['submit']) && !empty($_POST['nome']) && !empty($_POST['senha']))
+    {
+        //acessa
+        include_once('config.php');
+        $nome = $_POST['nome'];
+        $senha = $_POST['senha'];
+
+        //print_r('Nome: ' . $nome);
+        //print_r('<br>');
+        //print_r('Senha: ' . $senha);
+
+        $sql = "SELECT * FROM usuario WHERE nome = '$nome' and senha = '$senha'";
+
+        $result = $conexao->query($sql);
+
+        //print_r($result);
+        //print_r($sql);
+
+        if(mysqli_num_rows($result) < 1)
+        {
+            unset($_SESSION['nome']);
+            unset($_SESSION['senha']);
+            header('Location: index.php');
+        }
+        else
+        {
+            $_SESSION['nome'] = $nome;
+            $_SESSION['senha'] = $senha;
+            header('Location: inicio.php');
+        }
+    }
+    else
+    {
+        //nao acessa
+        header('Location: index.php');
+    }
+
+?>
